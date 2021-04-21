@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import ChatWindow from './components/ChatWindow';
 import io from 'socket.io-client';
+import MessageBoard from './components/MessageBoard';
 
 
 function App() {
@@ -15,14 +16,21 @@ function App() {
     setTypingStatus("");
     setMessages([...messages, data]);
   });
+
   socket.on('clientTyping', data => {
     setTypingStatus(data);
     setTimeout(() => setTypingStatus(""), 10000);
   });
+
   const typingHandler = e => {
     setMessage(e.target.value);
     socket.emit('clientTyping', `${user} is typing...`);
   }
+
+  const userChangeHandler = e => {
+    setUser(e.target.value);
+  }
+
   const submitHandler = e => {
     e.preventDefault();
 
@@ -30,27 +38,17 @@ function App() {
     setMessages([...messages, {user, message}]);
     setMessage('');
   }
-  useEffect(() => {
 
+
+  useEffect(() => {
     return () => socket.disconnect(true);
   }, [])
+
   return (
     <div className="App">
-      <h1>Hello there!</h1>
-      <div>
-        <h3>Message Board</h3>
-        {
-          messages.map((item, i) => 
-            <p>{item.user}: {item.message}</p>
-          )
-        }
-        <span>{typingStatus}</span>
-      </div>
-      <form onSubmit = {submitHandler}>
-        <input type="text" className="text" name="user" onChange={e => setUser(e.target.value) } placeholder="username"/>
-        <input type="text" className="text" name="message" onChange={ typingHandler } value={message}/>
-        <input type="submit" value="Submit"/>
-      </form>
+      <h1>Chat with Pals!</h1>
+      <ChatWindow typingHandler = {typingHandler} submitHandler= {submitHandler} message = {message} setMessage = {setMessage} />
+      <MessageBoard typingStatus = {typingStatus} messages = {messages} />
     </div>
   );
 }
