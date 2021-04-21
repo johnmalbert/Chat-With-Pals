@@ -1,8 +1,8 @@
 This React app scratches the surface of the power of Socket.io. Using Socket.io, users can send a message to other users on the server. 
+![sockets](https://user-images.githubusercontent.com/24249474/115631695-28154a00-a2bb-11eb-816d-85f201f7c04b.gif)
 
 Here's how to get the app up and running:
 
-git clone https://github.com/johnmalbert/JQZ-Developer-Playground
 npm i
 To install the dependencies:
 
